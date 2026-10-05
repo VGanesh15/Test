@@ -1,0 +1,171 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head(${pageTitle})}"></head>
+<body>
+<div th:replace="~{layout :: navbar(${cartItemCount})}"></div>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="container">
+    <nav aria-label="breadcrumb" class="mb-3">
+      <ol class="breadcrumb mb-0" style="--bs-breadcrumb-divider-color:rgba(255,255,255,.4)">
+        <li class="breadcrumb-item"><a href="/" style="color:rgba(255,255,255,.6);text-decoration:none">Home</a></li>
+        <li class="breadcrumb-item active" style="color:rgba(255,255,255,.85)"
+            th:text="${searchResults?.currentCategory?.name ?: categoryCode}">Category</li>
+      </ol>
+    </nav>
+    <h1 th:text="${searchResults?.currentCategory?.name ?: categoryCode}">Category</h1>
+    <p th:if="${searchResults != null}"
+       th:text="${searchResults.totalResults + ' products available'}">Products</p>
+    <p th:unless="${searchResults != null}">Browse our collection</p>
+  </div>
+</div>
+
+<div class="container py-5">
+  <div class="row g-4">
+    <!-- FILTER SIDEBAR -->
+    <div class="col-md-3">
+      <!-- Sort -->
+      <div class="filter-panel">
+        <h6><i class="bi bi-sort-down me-2"></i>Sort By</h6>
+        <div class="d-flex flex-column gap-1">
+          <a th:href="@{/c/{code}(code=${categoryCode})}"
+             th:class="${(sort == null or sort == '') ? 'filter-chip active' : 'filter-chip'}">Relevance</a>
+          <a th:href="@{/c/{code}(code=${categoryCode},sort='price_asc')}"
+             th:class="${sort == 'price_asc' ? 'filter-chip active' : 'filter-chip'}">Price: Low to High</a>
+          <a th:href="@{/c/{code}(code=${categoryCode},sort='price_desc')}"
+             th:class="${sort == 'price_desc' ? 'filter-chip active' : 'filter-chip'}">Price: High to Low</a>
+          <a th:href="@{/c/{code}(code=${categoryCode},sort='name_asc')}"
+             th:class="${sort == 'name_asc' ? 'filter-chip active' : 'filter-chip'}">Name: A to Z</a>
+        </div>
+      </div>
+
+      <!-- Facet Filters -->
+      <div class="filter-panel" th:each="facet : ${searchResults?.facets}">
+        <h6 th:text="${facet.name}">Facet</h6>
+        <div th:each="value : ${facet.values}" class="d-flex justify-content-between align-items-center mb-2">
+          <a th:href="@{/c/{code}(code=${categoryCode},q=${value.query})}"
+             class="filter-chip text-decoration-none" th:text="${value.name}">Value</a>
+          <span style="font-size:.72rem;color:var(--muted)" th:text="${value.count}">0</span>
+        </div>
+      </div>
+
+      <!-- Default price filter -->
+      <div class="filter-panel" th:if="${searchResults?.facets == null or searchResults.facets.isEmpty()}">
+        <h6><i class="bi bi-cash-coin me-2"></i>Price Range</h6>
+        <a href="#" class="filter-chip">Under $300</a>
+        <a href="#" class="filter-chip">$300 â€“ $800</a>
+        <a href="#" class="filter-chip">$800 â€“ $1,500</a>
+        <a href="#" class="filter-chip">Over $1,500</a>
+      </div>
+
+      <!-- Availability -->
+      <div class="filter-panel">
+        <h6><i class="bi bi-check-circle me-2"></i>Availability</h6>
+        <a href="#" class="filter-chip active">All Items</a>
+        <a href="#" class="filter-chip">In Stock Only</a>
+      </div>
+
+      <!-- Brand -->
+      <div class="filter-panel">
+        <h6><i class="bi bi-tag me-2"></i>Brand</h6>
+        <a href="#" class="filter-chip active">Samsung</a>
+      </div>
+    </div>
+
+    <!-- PRODUCT GRID -->
+    <div class="col-md-9">
+      <!-- Toolbar -->
+      <div class="d-flex justify-content-between align-items-center mb-3 bg-white p-3 rounded-3 border"
+           style="border-color:var(--border) !important">
+        <span style="font-size:.88rem;color:var(--muted)">
+          Showing <strong style="color:var(--primary)"
+                          th:text="${searchResults?.results != null ? searchResults.results.size() : 0}">0</strong>
+          of <strong style="color:var(--primary)"
+                     th:text="${searchResults?.totalResults ?: 0}">0</strong> products
+        </span>
+        <div class="d-flex gap-2">
+          <button class="btn btn-sm" style="border:1.5px solid var(--border);border-radius:8px;color:var(--muted)" title="Grid view">
+            <i class="bi bi-grid-3x3-gap"></i>
+          </button>
+          <button class="btn btn-sm" style="border:1.5px solid var(--border);border-radius:8px;color:var(--muted)" title="List view">
+            <i class="bi bi-list-ul"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Empty state -->
+      <div th:if="${searchResults?.results == null or searchResults.results.isEmpty()}" class="empty-state">
+        <i class="bi bi-inbox"></i>
+        <h4>No Products Found</h4>
+        <p class="text-muted">This category has no products yet.</p>
+        <a href="/search?q=" class="btn-hero mt-2">Browse All Products</a>
+      </div>
+
+      <!-- Product Grid -->
+      <div class="row g-3" th:unless="${searchResults?.results == null or searchResults.results.isEmpty()}">
+        <div class="col-sm-6 col-lg-4" th:each="product : ${searchResults.results}">
+          <div class="product-card">
+            <div class="img-wrap position-relative">
+              <span class="badge-new" th:if="${product.code != null and #strings.startsWith(product.code, 'I')}">NEW</span>
+              <div class="overlay-actions">
+                <form th:action="@{/cart/add}" method="POST" style="margin:0">
+                  <input type="hidden" name="productCode" th:value="${product.code}"/>
+                  <input type="hidden" name="quantity" value="1"/>
+                  <button type="submit" class="overlay-btn" title="Add to cart"><i class="bi bi-cart-plus"></i></button>
+                </form>
+              </div>
+              <a th:href="@{/p/{code}(code=${product.code})}">
+                <img th:src="${product.thumbnailUrl ?: 'https://picsum.photos/seed/' + product.code + '/400/320'}"
+                     th:alt="${product.name}" onerror="this.src='https://picsum.photos/seed/product/400/320'"/>
+              </a>
+            </div>
+            <div class="card-body">
+              <div class="product-brand" th:text="${product.manufacturerName ?: 'ElectroStore'}">Brand</div>
+              <a th:href="@{/p/{code}(code=${product.code})}" class="text-decoration-none">
+                <div class="product-title" th:text="${product.name}">Product Name</div>
+              </a>
+              <div class="d-flex align-items-center gap-1 mb-2">
+                <span class="stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i></span>
+                <span style="font-size:.73rem;color:var(--muted)">(4.5)</span>
+              </div>
+              <div class="d-flex align-items-center justify-content-between mb-3">
+                <span class="product-price" th:text="${product.price?.formattedValue ?: '$0.00'}">$0.00</span>
+                <span class="stock-in" th:if="${product.stock?.stockLevelStatus?.name() == 'inStock'}">In Stock</span>
+                <span class="stock-out" th:unless="${product.stock?.stockLevelStatus?.name() == 'inStock'}">Out of Stock</span>
+              </div>
+              <div class="d-flex gap-2">
+                <form th:action="@{/cart/add}" method="POST" style="flex:1;margin:0">
+                  <input type="hidden" name="productCode" th:value="${product.code}"/>
+                  <input type="hidden" name="quantity" value="1"/>
+                  <button type="submit" class="btn-add"><i class="bi bi-cart-plus me-1"></i>Add to Cart</button>
+                </form>
+                <button type="button" class="btn-wish btn"><i class="bi bi-heart"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <div th:if="${searchResults != null and searchResults.totalResults > 12}"
+           class="d-flex justify-content-center mt-4">
+        <nav>
+          <ul class="pagination">
+            <li class="page-item disabled"><a class="page-link" href="#">Â«</a></li>
+            <li class="page-item active"><a class="page-link" href="#" style="background:var(--accent);border-color:var(--accent)">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item"><a class="page-link" href="#">Â»</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div th:replace="~{layout :: footer}"></div>
+</body>
+</html>
+
+

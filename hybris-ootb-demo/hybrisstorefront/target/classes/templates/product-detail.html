@@ -1,0 +1,262 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head(${pageTitle})}"></head>
+<body>
+<div th:replace="~{layout :: navbar(${cartItemCount})}"></div>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb-bar">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/"><i class="bi bi-house me-1"></i>Home</a></li>
+        <li class="breadcrumb-item"><a href="/search?q=">Products</a></li>
+        <li class="breadcrumb-item active" th:text="${product?.name ?: 'Product'}">Product</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+
+<div class="container py-5">
+  <!-- Product not found -->
+  <div th:unless="${product != null}" class="empty-state">
+    <i class="bi bi-exclamation-circle"></i>
+    <h4>Product Not Found</h4>
+    <p class="text-muted">This product could not be loaded.</p>
+    <a href="/search?q=" class="btn-hero mt-2">Browse Products</a>
+  </div>
+
+  <!-- MAIN PRODUCT SECTION -->
+  <div th:if="${product != null}">
+    <div class="row g-5 mb-5">
+      <!-- Gallery -->
+      <div class="col-md-5">
+        <div class="pdp-gallery">
+          <img th:src="${product.thumbnailUrl ?: 'https://picsum.photos/seed/' + product.code + '/600/500'}"
+               th:alt="${product.name}"
+               id="mainImg"
+               onerror="this.src='https://picsum.photos/seed/product/600/500'"/>
+        </div>
+        <!-- Thumbnails -->
+        <div class="row g-2 mt-3" th:if="${product.images != null and !product.images.isEmpty()}">
+          <div class="col-3" th:each="img : ${product.images}">
+            <img th:src="${img.url}" th:alt="${img.altText}" class="img-fluid rounded border"
+                 style="height:70px;object-fit:cover;cursor:pointer;border-radius:8px !important"
+                 onclick="document.getElementById('mainImg').src=this.src"/>
+          </div>
+        </div>
+        <!-- Static thumbnails if no images -->
+        <div class="row g-2 mt-3" th:if="${product.images == null or product.images.isEmpty()}">
+          <div class="col-3" th:each="seed : ${ {'A','B','C','D'} }">
+            <img th:src="@{'https://picsum.photos/seed/' + ${product.code} + ${seed} + '/200/160'}"
+                 class="img-fluid" style="height:65px;object-fit:cover;border-radius:8px;cursor:pointer;border:1.5px solid var(--border)"
+                 onclick="document.getElementById('mainImg').src=this.src"/>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Info -->
+      <div class="col-md-7">
+        <div style="color:var(--accent);font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px"
+             th:text="${product.manufacturerName ?: 'ElectroStore'}">Brand</div>
+        <h1 class="pdp-title" th:text="${product.name}">Product Name</h1>
+        <div style="color:var(--muted);font-size:.85rem;margin-top:6px">SKU: <strong th:text="${product.code}">CODE</strong></div>
+
+        <!-- Rating -->
+        <div class="d-flex align-items-center gap-2 mt-2 mb-3">
+          <span style="color:#f1c40f;font-size:.95rem"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i></span>
+          <span style="font-size:.85rem;color:var(--muted)">4.5 (128 reviews)</span>
+        </div>
+
+        <!-- Price -->
+        <div class="d-flex align-items-baseline gap-3 mb-1">
+          <span class="pdp-price" th:text="${product.price?.formattedValue ?: '$0.00'}">$0.00</span>
+          <span class="pdp-price-old">$<span th:with="basePrice=${product.price?.value ?: 0}" th:text="${#numbers.formatDecimal(basePrice * 1.2, 1, 2)}">0.00</span></span>
+          <span class="tag-hot">SAVE 20%</span>
+        </div>
+
+        <!-- Stock -->
+        <div class="my-3">
+          <span class="stock-in" th:if="${product.stock?.stockLevelStatus?.name() == 'inStock'}">
+            <i class="bi bi-check-circle-fill me-1"></i>In Stock
+          </span>
+          <span class="stock-in" th:if="${product.stock?.stockLevelStatus?.name() == 'lowStock'}"
+                style="background:#fff8e8;color:#d68910">
+            <i class="bi bi-exclamation-circle me-1"></i>Low Stock
+          </span>
+          <span class="stock-out" th:unless="${product.stock?.stockLevelStatus?.name() == 'inStock' or product.stock?.stockLevelStatus?.name() == 'lowStock'}">
+            <i class="bi bi-x-circle me-1"></i>Out of Stock
+          </span>
+          <span th:if="${product.stock?.stockLevel != null}" style="font-size:.8rem;color:var(--muted);margin-left:10px">
+            (<span th:text="${product.stock.stockLevel}">0</span> remaining)
+          </span>
+        </div>
+
+        <hr style="border-color:var(--border)"/>
+
+        <!-- Add to cart -->
+        <form th:action="@{/cart/add}" method="POST">
+          <input type="hidden" name="productCode" th:value="${product.code}"/>
+
+          <div class="d-flex align-items-center gap-3 mb-4">
+            <label style="font-weight:700;font-size:.88rem">Quantity:</label>
+            <div class="qty-box">
+              <button type="button" onclick="adjustQty(-1)">âˆ’</button>
+              <input type="number" name="quantity" id="qty" value="1" min="1" max="99"/>
+              <button type="button" onclick="adjustQty(1)">+</button>
+            </div>
+          </div>
+
+          <div class="d-flex gap-3 flex-wrap">
+            <button type="submit" class="btn-pdp" style="flex:1;min-width:200px">
+              <i class="bi bi-cart-plus me-2"></i>Add to Cart
+            </button>
+            <button type="button" class="btn-wish btn" style="flex-shrink:0">
+              <i class="bi bi-heart"></i>
+            </button>
+            <button type="button" class="btn-wish btn" style="flex-shrink:0" title="Share">
+              <i class="bi bi-share"></i>
+            </button>
+          </div>
+        </form>
+
+        <!-- Meta Info -->
+        <div class="row g-3 mt-3">
+          <div class="col-6">
+            <div class="filter-panel py-3">
+              <div style="font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Category</div>
+              <div style="font-weight:600;font-size:.88rem;margin-top:3px" th:text="${(product.categories != null and !product.categories.isEmpty()) ? product.categories[0].name : 'Electronics'}">Electronics</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="filter-panel py-3">
+              <div style="font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Availability</div>
+              <div style="font-weight:600;font-size:.88rem;margin-top:3px;color:#27ae60">Usually ships in 2-3 days</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABS: Description / Specs / Reviews -->
+    <div class="mb-5">
+      <ul class="nav tab-nav border-bottom mb-4" id="pdpTabs">
+        <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#desc">Description</a></li>
+        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#specs">Specifications</a></li>
+        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#reviews">Reviews (128)</a></li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane fade show active" id="desc">
+          <p style="color:var(--muted);line-height:1.8;font-size:.95rem" th:if="${product.description != null}"
+             th:text="${product.description}">Description</p>
+          <p style="color:var(--muted);line-height:1.8;font-size:.95rem" th:unless="${product.description != null}">
+            Experience cutting-edge technology with the <strong th:text="${product.name}">product</strong>.
+            Built for performance and designed for everyday use, this product delivers exceptional quality
+            at an outstanding price. Part of our curated SAP Hybris Electronics Accelerator catalog.
+          </p>
+        </div>
+        <div class="tab-pane fade" id="specs">
+          <table class="table spec-row">
+            <tbody>
+              <tr><td style="font-weight:700;width:200px">Product Code</td><td th:text="${product.code}">-</td></tr>
+              <tr><td style="font-weight:700">Brand</td><td th:text="${product.manufacturerName ?: 'ElectroStore'}">-</td></tr>
+              <tr><td style="font-weight:700">Price</td><td th:text="${product.price?.formattedValue ?: '$0.00'}">-</td></tr>
+              <tr><td style="font-weight:700">Stock Status</td>
+                <td th:text="${product.stock?.stockLevelStatus?.name() == 'inStock' ? 'In Stock' : 'Out of Stock'}">-</td></tr>
+              <tr><td style="font-weight:700">Category</td><td th:text="${(product.categories != null and !product.categories.isEmpty()) ? product.categories[0].name : 'Electronics'}">-</td></tr>
+              <tr><td style="font-weight:700">EAN</td><td th:text="${product.ean ?: 'N/A'}">-</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="tab-pane fade" id="reviews">
+          <div class="row g-3 mb-4">
+            <div class="col-md-3 text-center">
+              <div style="font-size:3.5rem;font-weight:800;color:var(--primary)">4.5</div>
+              <div style="color:#f1c40f;font-size:1.2rem"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i></div>
+              <div style="font-size:.8rem;color:var(--muted)">128 reviews</div>
+            </div>
+            <div class="col-md-9">
+              <div class="d-flex align-items-center gap-3 mb-2">
+                <span style="font-size:.82rem;width:40px;text-align:right">5 &#9733;</span>
+                <div class="flex-grow-1 bg-light rounded" style="height:8px">
+                  <div class="rounded" style="background:var(--accent);height:8px;width:68%"></div>
+                </div>
+              </div>
+              <div class="d-flex align-items-center gap-3 mb-2">
+                <span style="font-size:.82rem;width:40px;text-align:right">4 &#9733;</span>
+                <div class="flex-grow-1 bg-light rounded" style="height:8px">
+                  <div class="rounded" style="background:var(--accent);height:8px;width:20%"></div>
+                </div>
+              </div>
+              <div class="d-flex align-items-center gap-3 mb-2">
+                <span style="font-size:.82rem;width:40px;text-align:right">3 &#9733;</span>
+                <div class="flex-grow-1 bg-light rounded" style="height:8px">
+                  <div class="rounded" style="background:var(--accent);height:8px;width:8%"></div>
+                </div>
+              </div>
+              <div class="d-flex align-items-center gap-3 mb-2">
+                <span style="font-size:.82rem;width:40px;text-align:right">2 &#9733;</span>
+                <div class="flex-grow-1 bg-light rounded" style="height:8px">
+                  <div class="rounded" style="background:var(--accent);height:8px;width:3%"></div>
+                </div>
+              </div>
+              <div class="d-flex align-items-center gap-3 mb-2">
+                <span style="font-size:.82rem;width:40px;text-align:right">1 &#9733;</span>
+                <div class="flex-grow-1 bg-light rounded" style="height:8px">
+                  <div class="rounded" style="background:var(--accent);height:8px;width:1%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Sample review -->
+          <div class="filter-panel mb-3">
+            <div class="d-flex justify-content-between mb-2">
+              <strong>Sarah M.</strong>
+              <span style="color:#f1c40f"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></span>
+            </div>
+            <div style="font-size:.88rem;color:var(--muted)">Excellent product! Exactly as described. Fast shipping and great packaging. Highly recommend to anyone looking for quality electronics.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SIMILAR PRODUCTS -->
+    <div th:if="${similarProducts != null and !similarProducts.isEmpty()}">
+      <div class="section-heading mb-2">You May Also Like</div>
+      <div class="section-line mb-4"></div>
+      <div class="row g-3">
+        <div class="col-6 col-md-3" th:each="sim : ${similarProducts}">
+          <div class="product-card">
+            <div class="img-wrap">
+              <a th:href="@{/p/{code}(code=${sim.code})}">
+                <img th:src="${sim.thumbnailUrl ?: 'https://picsum.photos/seed/' + sim.code + '/300/240'}"
+                     th:alt="${sim.name}" onerror="this.src='https://picsum.photos/seed/sim/300/240'"/>
+              </a>
+            </div>
+            <div class="card-body">
+              <div class="product-brand" th:text="${sim.manufacturerName ?: 'ElectroStore'}">Brand</div>
+              <a th:href="@{/p/{code}(code=${sim.code})}" class="text-decoration-none">
+                <div class="product-title" th:text="${sim.name}">Product</div>
+              </a>
+              <div class="product-price" th:text="${sim.price?.formattedValue ?: '$0.00'}">$0.00</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function adjustQty(delta) {
+    const input = document.getElementById('qty');
+    const val = parseInt(input.value) + delta;
+    if (val >= 1 && val <= 99) input.value = val;
+  }
+</script>
+
+<div th:replace="~{layout :: footer}"></div>
+</body>
+</html>
+
+

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head('My Account | Login')}"></head>
+<body>
+<div th:replace="~{layout :: navbar(0)}"></div>
+
+<div class="page-header">
+  <div class="container text-center">
+    <h1>My Account</h1>
+    <p>Sign in to manage your Samsung orders and wishlist</p>
+  </div>
+</div>
+
+<div class="container py-5" style="max-width:460px">
+  <div class="filter-panel" style="border-radius:var(--radius-lg);padding:40px">
+
+    <div th:if="${param.error}" class="alert alert-danger mb-4" style="border-radius:10px;font-size:.9rem">
+      <i class="bi bi-exclamation-triangle me-2"></i>Invalid email or password.
+    </div>
+    <div th:if="${param.logout}" class="alert alert-success mb-4" style="border-radius:10px;font-size:.9rem">
+      <i class="bi bi-check-circle me-2"></i>You have been signed out.
+    </div>
+
+    <h4 class="mb-4 fw-700" style="color:#e6edf3">Sign In</h4>
+
+    <form method="POST" action="/login">
+      <div class="mb-3">
+        <label class="form-label" style="color:var(--muted);font-size:.85rem">Email Address</label>
+        <input type="email" name="username" class="form-control"
+               style="background:#0d1117;border:1.5px solid var(--border);color:#e6edf3;border-radius:10px"
+               placeholder="demo@samsung-store.com" required/>
+      </div>
+      <div class="mb-4">
+        <label class="form-label" style="color:var(--muted);font-size:.85rem">Password</label>
+        <input type="password" name="password" class="form-control"
+               style="background:#0d1117;border:1.5px solid var(--border);color:#e6edf3;border-radius:10px"
+               placeholder="••••••••" required/>
+      </div>
+      <button type="submit" class="btn-add w-100 py-3" style="font-size:1rem">
+        <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
+      </button>
+    </form>
+
+    <div class="text-center mt-4" style="font-size:.82rem;color:var(--muted)">
+      Demo credentials: demo@samsung-store.com / Demo@1234
+    </div>
+
+    <hr style="border-color:var(--border);margin:28px 0"/>
+
+    <div class="text-center">
+      <p style="color:var(--muted);font-size:.85rem">Continue as guest</p>
+      <a href="/" class="btn-hero-outline" style="color:var(--accent);border-color:var(--border)">
+        <i class="bi bi-house me-1"></i>Browse Store
+      </a>
+    </div>
+  </div>
+</div>
+
+<div th:replace="~{layout :: footer}"></div>
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head('Galaxy Days Sale')}"></head>
+<body>
+<div th:replace="~{layout :: navbar(${cartItemCount})}"></div>
+
+<!-- SALE HERO -->
+<section style="background:linear-gradient(135deg,#0a0a0f 0%,#1a1035 40%,#0f1729 100%);padding:70px 0 50px;position:relative;overflow:hidden">
+  <div style="position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 30% 50%,rgba(99,102,241,.15) 0%,transparent 60%),radial-gradient(ellipse at 70% 30%,rgba(139,92,246,.12) 0%,transparent 60%);pointer-events:none"></div>
+  <div class="container" style="position:relative;z-index:1">
+    <div class="row align-items-center">
+      <div class="col-lg-8">
+        <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,68,68,.15);border:1px solid rgba(255,68,68,.3);border-radius:30px;padding:6px 18px;margin-bottom:20px">
+          <span style="width:8px;height:8px;background:#ff4444;border-radius:50%;animation:salePulse 1.2s ease-in-out infinite"></span>
+          <span style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#ff7070">LIVE NOW</span>
+        </div>
+        <h1 style="font-size:clamp(2.2rem,5vw,3.5rem);font-weight:900;letter-spacing:-2px;color:#fff;margin-bottom:12px">
+          Galaxy Days Sale
+        </h1>
+        <p style="font-size:1.1rem;color:rgba(255,255,255,.65);max-width:520px;line-height:1.65;margin-bottom:28px">
+          Up to <strong style="color:#f59e0b">40% off</strong> on selected Samsung Galaxy products — smartphones, tablets, laptops, audio and more.
+        </p>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center">
+          <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:14px 24px;text-align:center">
+            <div style="font-size:1.6rem;font-weight:900;color:#6366f1" th:text="${saleItems.size()}">12</div>
+            <div style="font-size:.72rem;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.5);margin-top:2px">Sale Items</div>
+          </div>
+          <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:14px 24px;text-align:center">
+            <div style="font-size:1.6rem;font-weight:900;color:#f59e0b">40%</div>
+            <div style="font-size:.72rem;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.5);margin-top:2px">Max Saving</div>
+          </div>
+          <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:14px 24px;text-align:center">
+            <div style="font-size:1.6rem;font-weight:900;color:#34d399">Samsung</div>
+            <div style="font-size:.72rem;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.5);margin-top:2px">Galaxy Only</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 d-none d-lg-flex justify-content-end" style="font-size:7rem;opacity:.12;font-weight:900;color:#6366f1;letter-spacing:-4px">SALE</div>
+    </div>
+  </div>
+</section>
+
+<style>
+  @keyframes salePulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.3)} }
+  .sale-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    overflow: hidden;
+    transition: transform .22s, box-shadow .22s, border-color .22s;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  .sale-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 50px rgba(0,0,0,.35);
+    border-color: rgba(99,102,241,.4);
+  }
+  .sale-img-wrap {
+    position: relative;
+    overflow: hidden;
+    background: #0d1117;
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .sale-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 16px;
+    transition: transform .35s;
+  }
+  .sale-card:hover .sale-img-wrap img { transform: scale(1.06); }
+  .badge-sale {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    background: linear-gradient(135deg,#ef4444,#dc2626);
+    color: #fff;
+    font-size: .72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    z-index: 2;
+  }
+  .badge-discount {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: linear-gradient(135deg,#f59e0b,#d97706);
+    color: #fff;
+    font-size: .8rem;
+    font-weight: 900;
+    padding: 5px 12px;
+    border-radius: 20px;
+    z-index: 2;
+  }
+  .sale-body { padding: 20px; flex: 1; display: flex; flex-direction: column; }
+  .sale-brand { font-size: .72rem; text-transform: uppercase; letter-spacing: 1.2px; color: #1428a0; font-weight: 700; margin-bottom: 6px; }
+  .sale-name { font-size: .97rem; font-weight: 700; color: #f0f6fc; margin-bottom: 12px; line-height: 1.4; }
+  .price-orig { font-size: .85rem; color: var(--muted); text-decoration: line-through; }
+  .price-sale { font-size: 1.4rem; font-weight: 900; color: #34d399; }
+  .price-saving { font-size: .78rem; color: #f59e0b; font-weight: 700; margin-top: 2px; }
+  .btn-add-sale {
+    display: block;
+    width: 100%;
+    padding: 11px;
+    background: linear-gradient(135deg,var(--accent),var(--accent2));
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: .9rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    margin-top: auto;
+    transition: opacity .18s, transform .18s;
+    text-decoration: none;
+  }
+  .btn-add-sale:hover { opacity: .88; transform: translateY(-1px); color: #fff; }
+</style>
+
+<!-- SALE PRODUCTS GRID -->
+<section class="py-5">
+  <div class="container">
+    <div class="d-flex align-items-center justify-content-between mb-4">
+      <div>
+        <div class="section-heading">Galaxy Days Sale Deals</div>
+        <div class="section-line"></div>
+      </div>
+      <div style="font-size:.85rem;color:var(--muted)">
+        <span th:text="${saleItems.size()}">12</span> items on sale
+      </div>
+    </div>
+
+    <div th:if="${saleItems == null or saleItems.isEmpty()}" style="text-align:center;padding:80px 20px;color:var(--muted)">
+      <i class="bi bi-tag" style="font-size:3rem;margin-bottom:16px;display:block"></i>
+      <h5>No sale items at the moment</h5>
+      <p>Check back soon for Galaxy Days Sale deals.</p>
+    </div>
+
+    <div class="row g-4" th:if="${saleItems != null and !saleItems.isEmpty()}">
+      <div class="col-sm-6 col-lg-4 col-xl-3" th:each="item : ${saleItems}">
+        <div class="sale-card" data-aos="fade-up">
+          <div class="sale-img-wrap">
+            <span class="badge-sale">SALE</span>
+            <span class="badge-discount" th:text="${'-' + item.discountPct + '%'}">-20%</span>
+            <a th:href="@{/p/{code}(code=${item.product.code})}">
+              <img th:src="${item.product.thumbnailUrl}"
+                   th:alt="${item.product.name}"
+                   onerror="this.src='https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400&q=80'"/>
+            </a>
+          </div>
+          <div class="sale-body">
+            <div class="sale-brand" th:text="${item.product.manufacturerName ?: 'Samsung'}">Samsung</div>
+            <a th:href="@{/p/{code}(code=${item.product.code})}" class="text-decoration-none">
+              <div class="sale-name" th:text="${item.product.name}">Product Name</div>
+            </a>
+            <div style="margin-bottom:16px">
+              <div class="price-orig" th:text="${item.originalPriceFormatted}">$1,299.99</div>
+              <div class="price-sale" th:text="${item.salePriceFormatted}">$1,039.99</div>
+              <div class="price-saving">
+                You save: <span th:text="${item.originalPriceFormatted}"></span> → <span th:text="${item.salePriceFormatted}"></span>
+              </div>
+            </div>
+            <form th:action="@{/cart/add}" method="POST" style="margin:0">
+              <input type="hidden" name="productCode" th:value="${item.product.code}"/>
+              <input type="hidden" name="quantity" value="1"/>
+              <button type="submit" class="btn-add-sale"><i class="bi bi-cart-plus me-2"></i>Add to Cart</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SALE INFO STRIP -->
+<section style="background:#161b22;border-top:1px solid rgba(255,255,255,.07);padding:40px 0">
+  <div class="container">
+    <div class="row g-4 text-center">
+      <div class="col-md-3 col-6">
+        <i class="bi bi-truck" style="font-size:1.8rem;color:var(--accent);margin-bottom:10px;display:block"></i>
+        <div style="font-weight:700;color:#f0f6fc;margin-bottom:4px">Free Shipping</div>
+        <div style="font-size:.83rem;color:var(--muted)">On all sale orders</div>
+      </div>
+      <div class="col-md-3 col-6">
+        <i class="bi bi-shield-check" style="font-size:1.8rem;color:var(--accent);margin-bottom:10px;display:block"></i>
+        <div style="font-weight:700;color:#f0f6fc;margin-bottom:4px">Samsung Warranty</div>
+        <div style="font-size:.83rem;color:var(--muted)">Full manufacturer coverage</div>
+      </div>
+      <div class="col-md-3 col-6">
+        <i class="bi bi-arrow-counterclockwise" style="font-size:1.8rem;color:var(--accent);margin-bottom:10px;display:block"></i>
+        <div style="font-weight:700;color:#f0f6fc;margin-bottom:4px">30-Day Returns</div>
+        <div style="font-size:.83rem;color:var(--muted)">Hassle-free policy</div>
+      </div>
+      <div class="col-md-3 col-6">
+        <i class="bi bi-lock" style="font-size:1.8rem;color:var(--accent);margin-bottom:10px;display:block"></i>
+        <div style="font-weight:700;color:#f0f6fc;margin-bottom:4px">Secure Payments</div>
+        <div style="font-size:.83rem;color:var(--muted)">256-bit encryption</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div th:replace="~{layout :: footer}"></div>
+</body>
+</html>

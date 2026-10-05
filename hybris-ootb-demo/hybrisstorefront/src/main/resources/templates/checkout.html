@@ -1,0 +1,273 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head('Checkout')}"></head>
+<body>
+<div th:replace="~{layout :: navbar(${cartItemCount})}"></div>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb-bar">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/"><i class="bi bi-house me-1"></i>Home</a></li>
+        <li class="breadcrumb-item"><a href="/cart">Cart</a></li>
+        <li class="breadcrumb-item active">Checkout</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+
+<div class="container py-5">
+  <h2 style="font-weight:800;margin-bottom:32px"><i class="bi bi-lock me-2" style="color:var(--accent)"></i>Secure Checkout</h2>
+
+  <!-- Error -->
+  <div class="alert alert-danger d-flex align-items-center gap-2 rounded-3" th:if="${error}">
+    <i class="bi bi-exclamation-circle-fill"></i>
+    <span th:text="${error}">Error</span>
+  </div>
+
+  <!-- STEP PROGRESS -->
+  <div class="step-bar mb-5">
+    <div class="step active">
+      <div class="step-circle"><i class="bi bi-geo-alt-fill" style="font-size:.8rem"></i></div>
+      <div class="step-label">Delivery</div>
+    </div>
+    <div class="step-line"></div>
+    <div class="step active">
+      <div class="step-circle"><i class="bi bi-credit-card-fill" style="font-size:.8rem"></i></div>
+      <div class="step-label">Payment</div>
+    </div>
+    <div class="step-line"></div>
+    <div class="step active">
+      <div class="step-circle"><i class="bi bi-clipboard-check-fill" style="font-size:.8rem"></i></div>
+      <div class="step-label">Review</div>
+    </div>
+  </div>
+
+  <form th:action="@{/checkout/placeOrder}" method="POST">
+    <div class="row g-4">
+      <!-- LEFT COLUMN -->
+      <div class="col-lg-7">
+
+        <!-- Delivery Address -->
+        <div class="checkout-section">
+          <h5><i class="bi bi-geo-alt me-2" style="color:var(--accent)"></i>Delivery Address</h5>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label fw-600" style="font-size:.85rem">First Name *</label>
+              <input type="text" class="form-control" name="firstName" required
+                     th:value="${address?.firstName}" placeholder="John"/>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-600" style="font-size:.85rem">Last Name *</label>
+              <input type="text" class="form-control" name="lastName" required
+                     th:value="${address?.lastName}" placeholder="Doe"/>
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-600" style="font-size:.85rem">Street Address *</label>
+              <input type="text" class="form-control" name="streetName" required
+                     th:value="${address?.streetName}" placeholder="123 Main Street"/>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-600" style="font-size:.85rem">City *</label>
+              <input type="text" class="form-control" name="town" required
+                     th:value="${address?.town}" placeholder="New York"/>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-600" style="font-size:.85rem">State</label>
+              <input type="text" class="form-control" name="region" th:value="${address?.region}" placeholder="NY"/>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-600" style="font-size:.85rem">Postal Code *</label>
+              <input type="text" class="form-control" name="postalCode" required
+                     th:value="${address?.postalCode}" placeholder="10001"/>
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-600" style="font-size:.85rem">Country</label>
+              <select class="form-select" name="country">
+                <option value="US" selected>United States</option>
+                <option value="GB">United Kingdom</option>
+                <option value="CA">Canada</option>
+                <option value="AU">Australia</option>
+                <option value="DE">Germany</option>
+                <option value="FR">France</option>
+              </select>
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-600" style="font-size:.85rem">Phone Number</label>
+              <input type="tel" class="form-control" name="phone" th:value="${address?.phone}" placeholder="+1 (555) 000-0000"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- Delivery Method -->
+        <div class="checkout-section">
+          <h5><i class="bi bi-truck me-2" style="color:var(--accent)"></i>Delivery Method</h5>
+          <div th:each="mode : ${deliveryModes}" class="delivery-opt">
+            <label style="cursor:pointer;width:100%;margin:0">
+              <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-3">
+                  <input type="radio" name="deliveryMode" th:value="${mode.code}" style="accent-color:var(--accent)"/>
+                  <div>
+                    <div style="font-weight:700;font-size:.93rem" th:text="${mode.name}">Standard</div>
+                    <div style="font-size:.8rem;color:var(--muted)" th:text="${mode.description}">3-5 business days</div>
+                  </div>
+                </div>
+                <div style="font-weight:700;color:var(--accent)" th:text="${mode.deliveryCost?.formattedValue ?: 'FREE'}">FREE</div>
+              </div>
+            </label>
+          </div>
+          <!-- Default if no modes -->
+          <div th:if="${deliveryModes == null or deliveryModes.isEmpty()}">
+            <div class="delivery-opt">
+              <label style="cursor:pointer;width:100%;margin:0">
+                <div class="d-flex align-items-center justify-content-between">
+                  <div class="d-flex align-items-center gap-3">
+                    <input type="radio" name="deliveryMode" value="standard" checked style="accent-color:var(--accent)"/>
+                    <div>
+                      <div style="font-weight:700;font-size:.93rem">Standard Delivery</div>
+                      <div style="font-size:.8rem;color:var(--muted)">5â€“7 business days</div>
+                    </div>
+                  </div>
+                  <div style="font-weight:700;color:#27ae60">FREE</div>
+                </div>
+              </label>
+            </div>
+            <div class="delivery-opt">
+              <label style="cursor:pointer;width:100%;margin:0">
+                <div class="d-flex align-items-center justify-content-between">
+                  <div class="d-flex align-items-center gap-3">
+                    <input type="radio" name="deliveryMode" value="express" style="accent-color:var(--accent)"/>
+                    <div>
+                      <div style="font-weight:700;font-size:.93rem">Express Delivery</div>
+                      <div style="font-size:.8rem;color:var(--muted)">1â€“2 business days</div>
+                    </div>
+                  </div>
+                  <div style="font-weight:700;color:var(--accent)">$12.99</div>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment -->
+        <div class="checkout-section">
+          <h5><i class="bi bi-credit-card me-2" style="color:var(--accent)"></i>Payment Method</h5>
+
+          <div class="payment-opt">
+            <label style="cursor:pointer;width:100%;margin:0">
+              <div class="d-flex align-items-center gap-3">
+                <input type="radio" name="paymentType" value="CARD" checked style="accent-color:var(--accent)"/>
+                <div class="d-flex align-items-center gap-3 flex-grow-1">
+                  <i class="bi bi-credit-card-2-front-fill" style="font-size:1.3rem;color:#0f3460"></i>
+                  <div>
+                    <div style="font-weight:700;font-size:.93rem">Credit / Debit Card</div>
+                    <div style="font-size:.78rem;color:var(--muted)">Visa Â· Mastercard Â· Amex</div>
+                  </div>
+                </div>
+              </div>
+            </label>
+          </div>
+
+          <!-- Card fields -->
+          <div class="mt-3" style="padding-left:26px">
+            <div class="row g-3">
+              <div class="col-12">
+                <label class="form-label" style="font-size:.85rem;font-weight:600">Card Number</label>
+                <input type="text" class="form-control" name="cardNumber"
+                       th:value="${paymentInfo?.cardNumber ?: '4111 1111 1111 1111'}"
+                       placeholder="1234 5678 9012 3456" maxlength="19"/>
+              </div>
+              <div class="col-7">
+                <label class="form-label" style="font-size:.85rem;font-weight:600">Card Holder</label>
+                <input type="text" class="form-control" name="cardHolderName"
+                       th:value="${paymentInfo?.cardHolderName}" placeholder="John Doe"/>
+              </div>
+              <div class="col-5">
+                <label class="form-label" style="font-size:.85rem;font-weight:600">Expiry</label>
+                <input type="text" class="form-control" placeholder="MM/YY" maxlength="5"/>
+              </div>
+            </div>
+          </div>
+
+          <div class="payment-opt mt-3">
+            <label style="cursor:pointer;width:100%;margin:0">
+              <div class="d-flex align-items-center gap-3">
+                <input type="radio" name="paymentType" value="PAYPAL" style="accent-color:var(--accent)"/>
+                <i class="bi bi-paypal" style="font-size:1.3rem;color:#003087"></i>
+                <span style="font-weight:700;font-size:.93rem">PayPal</span>
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN - Order Summary -->
+      <div class="col-lg-5">
+        <div class="cart-summary" style="position:sticky;top:100px">
+          <h5 style="font-weight:800;color:var(--primary);margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border)">
+            Order Summary
+          </h5>
+
+          <!-- Cart items preview -->
+          <div th:if="${cart?.entries != null}" style="max-height:260px;overflow-y:auto;margin-bottom:16px">
+            <div th:each="entry : ${cart.entries}"
+                 class="d-flex align-items-center gap-3 mb-3 pb-3"
+                 style="border-bottom:1px solid var(--border)">
+              <img th:src="${entry.product?.thumbnailUrl ?: 'https://picsum.photos/seed/' + entry.product?.code + '/100/100'}"
+                   th:alt="${entry.product?.name}"
+                   style="width:52px;height:52px;object-fit:contain;border-radius:8px;background:#f0f2f5;padding:4px"
+                   onerror="this.src='https://picsum.photos/seed/p/100/100'"/>
+              <div class="flex-grow-1">
+                <div style="font-size:.85rem;font-weight:600;line-height:1.3;color:var(--primary)"
+                     th:text="${entry.product?.name}">Product</div>
+                <div style="font-size:.78rem;color:var(--muted)">Qty: <span th:text="${entry.quantity}">1</span></div>
+              </div>
+              <div style="font-weight:700;font-size:.9rem;color:var(--primary)"
+                   th:text="${entry.totalPrice?.formattedValue ?: '$0.00'}">$0.00</div>
+            </div>
+          </div>
+
+          <div class="summary-row">
+            <span>Subtotal</span>
+            <span style="font-weight:600" th:text="${cart?.totalPrice?.formattedValue ?: '$0.00'}">$0.00</span>
+          </div>
+          <div class="summary-row">
+            <span>Delivery</span>
+            <span style="color:#27ae60;font-weight:600">FREE</span>
+          </div>
+          <div class="summary-row">
+            <span>Tax (10%)</span>
+            <span style="font-weight:600"
+                  th:with="tax=${(cart?.totalPrice?.value ?: 0) * 0.1}"
+                  th:text="'$' + ${#numbers.formatDecimal(tax, 1, 2)}">$0.00</span>
+          </div>
+
+          <div class="summary-total mt-2">
+            <span>Total</span>
+            <span style="color:var(--accent)"
+                  th:with="total=${(cart?.totalPrice?.value ?: 0) * 1.1}"
+                  th:text="'$' + ${#numbers.formatDecimal(total, 1, 2)}">$0.00</span>
+          </div>
+
+          <button type="submit" class="btn-place mt-4">
+            <i class="bi bi-lock me-2"></i>Place Order
+          </button>
+
+          <!-- Security badges -->
+          <div class="d-flex justify-content-center gap-3 mt-4 flex-wrap">
+            <span style="font-size:.72rem;color:var(--muted)"><i class="bi bi-shield-lock-fill text-success me-1"></i>SSL Secured</span>
+            <span style="font-size:.72rem;color:var(--muted)"><i class="bi bi-award-fill me-1" style="color:#f39c12"></i>Trusted Store</span>
+            <span style="font-size:.72rem;color:var(--muted)"><i class="bi bi-arrow-counterclockwise me-1" style="color:#17a2b8"></i>30-Day Return</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div th:replace="~{layout :: footer}"></div>
+</body>
+</html>
+
+

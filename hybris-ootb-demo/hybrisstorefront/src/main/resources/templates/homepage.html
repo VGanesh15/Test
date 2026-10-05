@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head('Home')}"></head>
+<body>
+<div th:replace="~{layout :: navbar(${cartItemCount})}"></div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="row align-items-center g-4">
+      <div class="col-lg-6 hero-content" data-aos="fade-right">
+        <div class="hero-tag"><i class="bi bi-stars me-1"></i> Galaxy Days Sale &mdash; Up to 40% off selected Samsung products</div>
+        <h1>Discover the Latest <em>Samsung</em> Galaxy Lineup</h1>
+        <p class="lead">From Galaxy S24 Ultra to Galaxy Book4 and Neo QLED TVs &mdash; the full Samsung ecosystem, all in one place.</p>
+        <div class="d-flex gap-3 flex-wrap mt-4">
+          <a href="/sale" class="btn-hero" style="background:linear-gradient(135deg,#ef4444,#dc2626)"><i class="bi bi-tag me-2"></i>Shop the Sale</a>
+          <a href="/search?q=" class="btn-hero-outline"><i class="bi bi-grid me-2"></i>All Products</a>
+        </div>
+        <div class="hero-stat row g-3 mt-2">
+          <div class="col-4">
+            <div class="hero-stat-num">32+</div>
+            <div class="hero-stat-label">Products</div>
+          </div>
+          <div class="col-4">
+            <div class="hero-stat-num">9</div>
+            <div class="hero-stat-label">Categories</div>
+          </div>
+          <div class="col-4">
+            <div class="hero-stat-num">Samsung</div>
+            <div class="hero-stat-label">Official Store</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 d-none d-lg-flex justify-content-center" data-aos="fade-left">
+        <div class="hero-img-box" style="width:100%;max-width:480px">
+          <div class="row g-3">
+            <div class="col-6">
+              <img src="https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s24-ultra-5g-sm-s928-stylus.jpg"
+                   alt="Samsung Galaxy S24 Ultra" class="img-fluid rounded-3" style="height:160px;width:100%;object-fit:contain;background:#0d1117;padding:8px"
+                   onerror="this.src='https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=260&q=80';this.style.objectFit='cover'"/>
+            </div>
+            <div class="col-6">
+              <img src="https://images.samsung.com/is/image/samsung/assets/us/computing/galaxybooks/galaxy-book4-ultra/GB4Ultra-HD01-HomeKV-D.jpg?imwidth=300"
+                   alt="Samsung Galaxy Book4 Ultra" class="img-fluid rounded-3" style="height:160px;width:100%;object-fit:cover"/>
+            </div>
+            <div class="col-6">
+              <img src="https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-tab-s10-ultra.jpg"
+                   alt="Samsung Galaxy Tab S10 Ultra" class="img-fluid rounded-3" style="height:160px;width:100%;object-fit:contain;background:#0d1117;padding:8px"
+                   onerror="this.src='https://images.unsplash.com/photo-1632932197941-d5e40cee9be3?w=260&q=80';this.style.objectFit='cover'"/>
+            </div>
+            <div class="col-6">
+              <img src="https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-watch-ultra.jpg"
+                   alt="Samsung Galaxy Watch Ultra" class="img-fluid rounded-3" style="height:160px;width:100%;object-fit:contain;background:#0d1117;padding:8px"
+                   onerror="this.src='https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=260&q=80';this.style.objectFit='cover'"/>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES STRIP -->
+<section class="features-strip">
+  <div class="container">
+    <div class="row g-0">
+      <div class="col-md-3 col-6 border-end">
+        <div class="feature-item">
+          <div class="fi-icon"><i class="bi bi-truck"></i></div>
+          <div><div class="fi-title">Free Shipping</div><div class="fi-sub">On orders over $99</div></div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6 border-end">
+        <div class="feature-item">
+          <div class="fi-icon"><i class="bi bi-arrow-counterclockwise"></i></div>
+          <div><div class="fi-title">30-Day Returns</div><div class="fi-sub">Hassle-free policy</div></div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6 border-end">
+        <div class="feature-item">
+          <div class="fi-icon"><i class="bi bi-headset"></i></div>
+          <div><div class="fi-title">24/7 Support</div><div class="fi-sub">Always here to help</div></div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="feature-item">
+          <div class="fi-icon"><i class="bi bi-shield-check"></i></div>
+          <div><div class="fi-title">Secure Checkout</div><div class="fi-sub">Encrypted payments</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALAXY DAYS SALE BANNER -->
+<section style="background:linear-gradient(135deg,#1a0a0a 0%,#2d1515 50%,#1a0a0a 100%);padding:60px 0;position:relative;overflow:hidden">
+  <div style="position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 20% 50%,rgba(239,68,68,.12) 0%,transparent 60%),radial-gradient(ellipse at 80% 50%,rgba(245,158,11,.1) 0%,transparent 60%);pointer-events:none"></div>
+  <div class="container" style="position:relative;z-index:1">
+    <div class="row align-items-center g-4">
+      <div class="col-lg-7" data-aos="fade-right">
+        <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,68,68,.15);border:1px solid rgba(255,68,68,.3);border-radius:30px;padding:5px 14px;margin-bottom:18px">
+          <span style="width:7px;height:7px;background:#ff4444;border-radius:50%;display:inline-block;animation:salePulse2 1.2s ease-in-out infinite"></span>
+          <span style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#ff7070">GALAXY DAYS SALE — LIVE NOW</span>
+        </div>
+        <h2 style="font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;letter-spacing:-1.5px;color:#fff;margin-bottom:12px">
+          Up to <span style="color:#f59e0b">40% Off</span> Selected<br>Samsung Galaxy Products
+        </h2>
+        <p style="color:rgba(255,255,255,.6);max-width:480px;line-height:1.65;margin-bottom:28px">
+          Massive savings on Galaxy S24 Ultra, Z Fold6, Tab S10 Ultra, Galaxy Book4, Galaxy Watch and more. Limited time only.
+        </p>
+        <div class="d-flex gap-3 flex-wrap">
+          <a href="/sale" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;padding:13px 28px;border-radius:12px;font-weight:700;font-size:.95rem;text-decoration:none;transition:opacity .18s" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">
+            <i class="bi bi-tag-fill"></i> Shop Sale Now
+          </a>
+          <a href="/c/smartphones" style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);color:#fff;padding:13px 24px;border-radius:12px;font-weight:600;font-size:.95rem;text-decoration:none;border:1px solid rgba(255,255,255,.15);transition:background .18s" onmouseover="this.style.background='rgba(255,255,255,.14)'" onmouseout="this.style.background='rgba(255,255,255,.08)'">
+            <i class="bi bi-phone"></i> Galaxy Phones
+          </a>
+        </div>
+      </div>
+      <div class="col-lg-5" data-aos="fade-left">
+        <div class="row g-3">
+          <div class="col-6">
+            <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:16px;text-align:center">
+              <img src="https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s24-ultra-5g-sm-s928-stylus.jpg"
+                   alt="Galaxy S24 Ultra" style="height:110px;width:100%;object-fit:contain"
+                   onerror="this.style.display='none'"/>
+              <div style="font-size:.8rem;font-weight:700;color:#f0f6fc;margin-top:8px">Galaxy S24 Ultra</div>
+              <div style="font-size:.75rem;color:#34d399;font-weight:700">20% OFF</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:16px;text-align:center">
+              <img src="https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-z-fold6.jpg"
+                   alt="Galaxy Z Fold6" style="height:110px;width:100%;object-fit:contain"
+                   onerror="this.style.display='none'"/>
+              <div style="font-size:.8rem;font-weight:700;color:#f0f6fc;margin-top:8px">Galaxy Z Fold6</div>
+              <div style="font-size:.75rem;color:#34d399;font-weight:700">20% OFF</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:16px;text-align:center">
+              <img src="https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-tab-s10-ultra.jpg"
+                   alt="Galaxy Tab S10 Ultra" style="height:110px;width:100%;object-fit:contain"
+                   onerror="this.style.display='none'"/>
+              <div style="font-size:.8rem;font-weight:700;color:#f0f6fc;margin-top:8px">Tab S10 Ultra</div>
+              <div style="font-size:.75rem;color:#34d399;font-weight:700">25% OFF</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:16px;text-align:center">
+              <img src="https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-watch-ultra.jpg"
+                   alt="Galaxy Watch Ultra" style="height:110px;width:100%;object-fit:contain"
+                   onerror="this.style.display='none'"/>
+              <div style="font-size:.8rem;font-weight:700;color:#f0f6fc;margin-top:8px">Watch Ultra</div>
+              <div style="font-size:.75rem;color:#34d399;font-weight:700">20% OFF</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<style>@keyframes salePulse2{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}</style>
+
+<!-- SHOP BY CATEGORY -->
+<section class="py-5">
+  <div class="container">
+    <div class="d-flex align-items-end justify-content-between mb-4" data-aos="fade-up">
+      <div>
+        <div class="section-heading">Shop by Category</div>
+        <div class="section-line"></div>
+      </div>
+      <a href="/search?q=" class="text-decoration-none" style="color:var(--accent);font-size:.88rem;font-weight:600">
+        View All <i class="bi bi-arrow-right ms-1"></i>
+      </a>
+    </div>
+
+    <div class="row g-3">
+      <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="0">
+        <a href="/c/monitors" class="cat-tile">
+          <div class="cat-tile-inner" style="background:linear-gradient(135deg,#eff6ff,#dbeafe)">
+            <div class="cat-tile-icon">&#128247;</div>
+            <div class="cat-tile-name">Monitors</div>
+            <div class="cat-tile-count">Odyssey &amp; ViewFinity</div>
+          </div>
+        </a>
+      </div>
+      <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="60">
+        <a href="/c/smartphones" class="cat-tile">
+          <div class="cat-tile-inner" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7)">
+            <div class="cat-tile-icon">&#128241;</div>
+            <div class="cat-tile-name">Smartphones</div>
+            <div class="cat-tile-count">Galaxy S &amp; Z Series</div>
+          </div>
+        </a>
+      </div>
+      <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="120">
+        <a href="/c/laptops" class="cat-tile">
+          <div class="cat-tile-inner" style="background:linear-gradient(135deg,#fffbeb,#fef3c7)">
+            <div class="cat-tile-icon">&#128187;</div>
+            <div class="cat-tile-name">Laptops</div>
+            <div class="cat-tile-count">Pro &amp; Gaming</div>
+          </div>
+        </a>
+      </div>
+      <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="180">
+        <a href="/c/tablets" class="cat-tile">
+          <div class="cat-tile-inner" style="background:linear-gradient(135deg,#fdf4ff,#fae8ff)">
+            <div class="cat-tile-icon">&#128187;</div>
+            <div class="cat-tile-name">Tablets</div>
+            <div class="cat-tile-count">Galaxy Tab S Series</div>
+          </div>
+        </a>
+      </div>
+      <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="0">
+        <a href="/c/audio" class="cat-tile">
+          <div class="cat-tile-inner" style="background:linear-gradient(135deg,#fff1f2,#ffe4e6)">
+            <div class="cat-tile-icon">&#127911;</div>
+            <div class="cat-tile-name">Audio</div>
+            <div class="cat-tile-count">Headphones &amp; Speakers</div>
+          </div>
+        </a>
+      </div>
+      <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="60">
+        <a href="/c/tvs" class="cat-tile">
+          <div class="cat-tile-inner" style="background:linear-gradient(135deg,#ecfdf5,#d1fae5)">
+            <div class="cat-tile-icon">&#128250;</div>
+            <div class="cat-tile-name">TVs &amp; Displays</div>
+            <div class="cat-tile-count">OLED &amp; QLED</div>
+          </div>
+        </a>
+      </div>
+      <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="120">
+        <a href="/c/accessories" class="cat-tile">
+          <div class="cat-tile-inner" style="background:linear-gradient(135deg,#f0f9ff,#e0f2fe)">
+            <div class="cat-tile-icon">&#8987;</div>
+            <div class="cat-tile-name">Accessories</div>
+            <div class="cat-tile-count">Watches &amp; Peripherals</div>
+          </div>
+        </a>
+      </div>
+      <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="180">
+        <a href="/search?q=" class="cat-tile">
+          <div class="cat-tile-inner" style="background:linear-gradient(135deg,#f8fafc,#f1f5f9)">
+            <div class="cat-tile-icon">&#128269;</div>
+            <div class="cat-tile-name">Browse All</div>
+            <div class="cat-tile-count">All categories</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED PRODUCTS -->
+<section class="py-5" style="background:transparent;border-top:1px solid rgba(255,255,255,.07)">
+  <div class="container">
+    <div class="d-flex align-items-end justify-content-between mb-4" data-aos="fade-up">
+      <div>
+        <div class="section-heading">Featured Products</div>
+        <div class="section-line"></div>
+        <div class="section-sub mt-2">Handpicked top-selling Samsung Galaxy products</div>
+      </div>
+      <a href="/search?q=" class="text-decoration-none" style="color:var(--accent);font-size:.88rem;font-weight:600">
+        See All <i class="bi bi-arrow-right ms-1"></i>
+      </a>
+    </div>
+
+    <div class="row g-3" th:if="${featuredProducts != null and !featuredProducts.isEmpty()}">
+      <div class="col-6 col-md-4 col-lg-3" data-aos="fade-up" th:each="product, iter : ${featuredProducts}" th:attr="data-aos-delay=${iter.index * 40}">
+        <div class="product-card">
+          <div class="img-wrap position-relative">
+            <span class="badge-new" th:if="${product.code == 'SAM_S24U' or product.code == 'SAM_ZFOLD6' or product.code == 'BOOK4_ULTRA' or product.code == 'TAB_S10U' or product.code == 'WATCH_ULTRA'}">NEW</span>
+            <div class="overlay-actions">
+              <form th:action="@{/cart/add}" method="POST" style="margin:0">
+                <input type="hidden" name="productCode" th:value="${product.code}"/>
+                <input type="hidden" name="quantity" value="1"/>
+                <button type="submit" class="overlay-btn" title="Add to cart"><i class="bi bi-cart-plus"></i></button>
+              </form>
+            </div>
+            <a th:href="@{/p/{code}(code=${product.code})}">
+              <img th:src="${product.thumbnailUrl}"
+                   th:alt="${product.name}"
+                   onerror="this.src='https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400&q=80'"/>
+            </a>
+          </div>
+          <div class="card-body">
+            <div class="product-brand" th:text="${product.manufacturerName ?: 'ElectroStore'}">Brand</div>
+            <a th:href="@{/p/{code}(code=${product.code})}" class="text-decoration-none">
+              <div class="product-title" th:text="${product.name}">Product Name</div>
+            </a>
+            <div class="d-flex align-items-center gap-1 mb-2">
+              <span class="stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i></span>
+              <span style="font-size:.75rem;color:var(--muted)">(4.5)</span>
+            </div>
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <span class="product-price" th:text="${product.price?.formattedValue ?: '$0.00'}">$0.00</span>
+              <span class="stock-in" th:if="${product.stock?.stockLevelStatus?.name() == 'inStock'}">In Stock</span>
+              <span class="stock-out" th:unless="${product.stock?.stockLevelStatus?.name() == 'inStock'}">Out</span>
+            </div>
+            <div class="d-flex gap-2">
+              <form th:action="@{/cart/add}" method="POST" style="flex:1;margin:0">
+                <input type="hidden" name="productCode" th:value="${product.code}"/>
+                <input type="hidden" name="quantity" value="1"/>
+                <button type="submit" class="btn-add"><i class="bi bi-cart-plus me-1"></i>Add to Cart</button>
+              </form>
+              <button type="button" class="btn-wish btn"><i class="bi bi-heart"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div th:if="${featuredProducts == null or featuredProducts.isEmpty()}" class="empty-state">
+      <i class="bi bi-box-seam"></i>
+      <h5 class="fw-bold">No products yet</h5>
+      <p class="text-muted">Check back soon for our featured electronics.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROMO BANNERS ROW -->
+<section class="py-5">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-md-6" data-aos="fade-right">
+        <div class="promo-card" style="min-height:220px">
+          <div style="color:rgba(165,180,252,.8);font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;position:relative;z-index:1">
+            <i class="bi bi-display me-1"></i>MONITORS &amp; GAMING
+          </div>
+          <h3 class="mb-2">Odyssey &amp; ViewFinity Displays</h3>
+          <p class="mb-3">Immersive OLED gaming monitors and professional 5K displays from Samsung.</p>
+          <a href="/c/monitors" class="btn-hero" style="position:relative;z-index:1">Shop Monitors <i class="bi bi-arrow-right ms-1"></i></a>
+        </div>
+      </div>
+      <div class="col-md-6" data-aos="fade-left">
+        <div class="promo-card" style="min-height:220px;background:linear-gradient(120deg,#1e293b 0%,#0f172a 100%)">
+          <div style="color:rgba(165,243,252,.7);font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;position:relative;z-index:1">
+            <i class="bi bi-phone me-1"></i>GALAXY S &amp; Z SERIES
+          </div>
+          <h3 class="mb-2">Latest Galaxy S24 &amp; Z Fold6</h3>
+          <p class="mb-3">Flagship Galaxy S24 Ultra, Z Fold6, Z Flip6 &mdash; the future of Samsung smartphones.</p>
+          <a href="/c/smartphones" class="btn-hero" style="position:relative;z-index:1">Shop Galaxy <i class="bi bi-arrow-right ms-1"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BRAND TRUST ROW -->
+<section class="py-4" style="background:#161b22;border-top:1px solid rgba(255,255,255,.07);border-bottom:1px solid rgba(255,255,255,.07)">
+  <div class="container">
+    <div class="text-center mb-3" style="font-size:.76rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);font-weight:600">Your official Samsung Galaxy destination</div>
+    <div class="d-flex justify-content-center align-items-center flex-wrap gap-5">
+      <span style="font-size:1.1rem;font-weight:700;color:#1428a0">Galaxy S Series</span>
+      <span style="font-size:1.1rem;font-weight:700;color:#1428a0">Galaxy Z Fold</span>
+      <span style="font-size:1.1rem;font-weight:700;color:#1428a0">Galaxy Book</span>
+      <span style="font-size:1.1rem;font-weight:700;color:#1428a0">Neo QLED TV</span>
+      <span style="font-size:1.1rem;font-weight:700;color:#1428a0">Galaxy Buds</span>
+      <span style="font-size:1.1rem;font-weight:700;color:#1428a0">Galaxy Watch</span>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER / SALE CTA -->
+<section class="py-5">
+  <div class="container" data-aos="fade-up">
+    <div style="background:linear-gradient(120deg,#1e1b4b 0%,#312e81 100%);border-radius:24px;padding:50px 40px;text-align:center;color:#fff">
+      <div style="font-size:.76rem;text-transform:uppercase;letter-spacing:2px;color:#a5b4fc;font-weight:600;margin-bottom:12px">Stay Updated</div>
+      <h2 style="font-weight:900;font-size:2rem;letter-spacing:-1px;margin-bottom:10px">Get Exclusive Deals &amp; Early Access</h2>
+      <p style="color:rgba(255,255,255,.6);max-width:460px;margin:0 auto 28px;line-height:1.65">Join 50,000+ shoppers who receive our weekly deals newsletter. Be first to know about sales and new arrivals.</p>
+      <div class="d-flex justify-content-center">
+        <div class="d-flex search-box" style="max-width:480px;width:100%">
+          <input class="form-control" type="email" placeholder="Enter your email address..." style="border-radius:28px 0 0 28px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.2);color:#fff;"/>
+          <button class="btn-search btn" style="background:var(--accent);border-radius:0 28px 28px 0;white-space:nowrap;padding:9px 22px">Subscribe Free</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div th:replace="~{layout :: footer}"></div>
+</body>
+</html>

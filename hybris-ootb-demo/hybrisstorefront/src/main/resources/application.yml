@@ -1,0 +1,81 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+
+spring:
+  application:
+    name: hybris-ootb-demo
+  datasource:
+    url: jdbc:h2:mem:hybrisdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+        dialect: org.hibernate.dialect.H2Dialect
+        cache:
+          use_second_level_cache: false
+          use_query_cache: false
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  thymeleaf:
+    cache: false
+    mode: HTML
+    encoding: UTF-8
+    prefix: classpath:/templates/
+    suffix: .html
+  cache:
+    type: caffeine
+    caffeine:
+      spec: maximumSize=1000,expireAfterWrite=300s
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    default-property-inclusion: non_null
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+  info:
+    title: "SAP Hybris Commerce OCC v2 API"
+    description: "OOTB Electronics Storefront - OCC REST API"
+    version: "2211.0"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    com.hybris: INFO
+    org.springframework.security: WARN
+    org.hibernate.SQL: WARN
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+
+# Hybris-specific properties (mirrors local.properties)
+hybris:
+  storefront:
+    name: electronics
+  catalog:
+    id: electronicsProductCatalog
+    version: Online
+  commerce:
+    baseSiteId: electronics

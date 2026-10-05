@@ -1,0 +1,9 @@
+com\hybris\occ\controllers\CartsController.class
+com\hybris\occ\dto\RegisterRequestWsDTO.class
+com\hybris\occ\dto\AddToCartRequestWsDTO.class
+com\hybris\occ\dto\ResponseWsDTO.class
+com\hybris\occ\controllers\OrdersController.class
+com\hybris\occ\dto\ErrorWsDTO.class
+com\hybris\occ\controllers\BaseController.class
+com\hybris\occ\controllers\ProductsController.class
+com\hybris\occ\controllers\UsersController.class
